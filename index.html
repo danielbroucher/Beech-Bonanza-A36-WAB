@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>A36 Weight & Balance</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="app">
+<header>
+<h1>A36 Electronic Load Sheet</h1>
+<p>Mass & CG Calculator (Metric)</p>
+</header>
+
+<section class="card">
+<h2>Occupants</h2>
+<div class="grid">
+<label>Pilot (kg)</label><input id="pilot">
+<label>Copilot (kg)</label><input id="copilot">
+<label>Rear Seat FS115 (kg)</label><input id="rear1">
+<label>Rear Seat FS120 (kg)</label><input id="rear2">
+</div>
+</section>
+
+<section class="card">
+<h2>Baggage</h2>
+<div class="grid">
+<label>Front baggage FS91 (kg, max 18)</label><input id="bag1">
+<label>Aft baggage FS150 (kg, max 181)</label><input id="bag2">
+</div>
+</section>
+
+<section class="card">
+<h2>Fuel</h2>
+<div class="grid">
+<label>Fuel onboard (liters)</label><input id="fuel">
+</div>
+</section>
+
+<button onclick="calculate()">Calculate</button>
+
+<section class="card">
+<h2>Results</h2>
+<div id="out"></div>
+<h3>CG Position Diagram</h3>
+
+<div class="cg-diagram">
+
+<!-- simple aircraft silhouette -->
+<svg viewBox="0 0 600 120" class="plane-svg">
+  <rect x="40" y="55" width="420" height="10" rx="5"/>
+  <polygon points="460,60 520,40 520,80"/>
+  <polygon points="180,60 240,30 240,90"/>
+</svg>
+
+<!-- CG track -->
+<div class="cg-track">
+  <div class="cg-limit-zone" id="cgZone"></div>
+  <div class="cg-dot" id="cgDot"></div>
+</div>
+
+<div class="cg-labels">
+  <span id="cgFwdLabel"></span>
+  <span id="cgAftLabel"></span>
+</div>
+
+</div>
+</section>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
