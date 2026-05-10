@@ -1,28 +1,20 @@
-// =====================================
-// UNIT CONSTANTS
-// =====================================
+
 
 const LB_TO_KG = 0.45359237;
 const IN_TO_MM = 25.4;
 const GAL_TO_L = 3.78541;
 
-// =====================================
-// AIRCRAFT DATA — CONFIRMED FROM MANUAL
-// =====================================
 
-// Basic Empty Condition (matched pair)
 const BEW_LB = 2231;
 const BEW_MOM_DIV100 = 1712;
 
-// Convert empty values
+
 const BEW_KG = BEW_LB * LB_TO_KG;
 
-// moment conversion:
-// (moment/100 × 100) gives lb*in
-// convert to kg*mm
+
 const BEW_MOMENT = BEW_MOM_DIV100 * 100 * LB_TO_KG * IN_TO_MM;
 
-// Arms (your confirmed stations)
+
 const ARM_PILOT = 77 * IN_TO_MM;
 const ARM_REAR1 = 115 * IN_TO_MM;
 const ARM_REAR2 = 120 * IN_TO_MM;
@@ -30,27 +22,22 @@ const ARM_BAG1 = 91 * IN_TO_MM;
 const ARM_BAG2 = 150 * IN_TO_MM;
 const ARM_FUEL = 75 * IN_TO_MM;
 
-// Limits
+
 const BAG1_MAX = 40 * LB_TO_KG;
 const BAG2_MAX = 400 * LB_TO_KG;
 const MTOW_KG = 3600 * LB_TO_KG;
 
-// Fuel
+
 const FUEL_LB_PER_GAL = 6;
 const TAXI_FUEL_LB = 12;
 
-const CG_SCALE_MIN = 70;   // left edge of diagram scale
-const CG_SCALE_MAX = 90;   // right edge of diagram scale
+const CG_SCALE_MIN = 70;   
+const CG_SCALE_MAX = 90;   
 
-// =====================================
-// CG ENVELOPE — FROM YOUR TABLE
-// =====================================
+
 
 const AFT_LIMIT = 87.7;
 
-// =====================================
-// MAIN CALCULATION
-// =====================================
 
 function calculate() {
 
