@@ -166,7 +166,6 @@ Total Mass: <b>${mass.toFixed(1)} kg</b><br>
 CG: <b>${cg_mm.toFixed(0)} mm (${cg_in.toFixed(2)} in)</b><br>
 Envelope: ${fwd.toFixed(1)} – ${aft} in<br>
 Status: ${warnings.length ? warnings.join("<br>") : "Within limits ✅"}
-updateCGDiagram(cg_in, fwd, aft);
 `;
 
 }
