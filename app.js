@@ -46,66 +46,8 @@ const CG_SCALE_MAX = 90;   // right edge of diagram scale
 // CG ENVELOPE — FROM YOUR TABLE
 // =====================================
 
-const envelope = [
-{w:3100, fwd:74.0, aft:87.7},
-{w:3200, fwd:75.4, aft:87.7},
-{w:3400, fwd:78.2, aft:87.7},
-{w:3600, fwd:81.0, aft:87.7}
-];
+const AFT_LIMIT = 87.7;
 
-// interpolate forward limit
-function interpFwd(weightLb) {
-if (weightLb <= 3100) return 74.0;
-if (weightLb >= 3600) return 81.0;
-
-for (let i=0;i<envelope.length-1;i++) {
-let a = envelope[i];
-let b = envelope[i+1];
-if (weightLb >= a.w && weightLb <= b.w) {
-let t = (weightLb-a.w)/(b.w-a.w);
-return a.fwd + t*(b.fwd-a.fwd);
-}
-}
-}
-function updateCGDiagram(cg_in, fwd, aft) {
-
-const track = document.querySelector(".cg-track");
-const dot = document.getElementById("cgDot");
-const zone = document.getElementById("cgZone");
-
-const trackW = track.clientWidth;
-
-// convert inch → %
-function toPct(val){
-return (val - CG_SCALE_MIN) / (CG_SCALE_MAX - CG_SCALE_MIN);
-}
-
-// limit zone
-let leftPct = toPct(fwd);
-let rightPct = toPct(aft);
-
-zone.style.left = (leftPct * trackW) + "px";
-zone.style.width = ((rightPct-leftPct) * trackW) + "px";
-
-// CG dot
-let cgPct = toPct(cg_in);
-dot.style.left = (cgPct * trackW - 11) + "px";
-
-// color if out of limits
-if (cg_in < fwd || cg_in > aft) {
-dot.style.background = "#ef4444";
-} else {
-dot.style.background = "#22c55e";
-}
-
-// labels
-document.getElementById("cgFwdLabel").innerText =
-`FWD ${fwd.toFixed(1)} in`;
-
-document.getElementById("cgAftLabel").innerText =
-`AFT ${aft.toFixed(1)} in`;
-
-}
 // =====================================
 // MAIN CALCULATION
 // =====================================
@@ -119,6 +61,10 @@ let rear2 = +rear2El().value || 0;
 let bag1 = +bag1El().value || 0;
 let bag2 = +bag2El().value || 0;
 let fuelL = +fuelEl().value || 0;
+
+let bewMass = +bewMassEl().value || BEW_KG;
+let bewCgIn = +bewCgEl().value || (BEW_MOMENT / BEW_KG / IN_TO_MM);
+let bewMoment = bewMass * bewCgIn * IN_TO_MM;
 
 let warnings = [];
 
@@ -134,7 +80,7 @@ let fuelKg = fuelLb * LB_TO_KG;
 
 // total moment
 let moment =
-BEW_MOMENT +
+bewMoment +
 pilot*ARM_PILOT +
 copilot*ARM_PILOT +
 rear1*ARM_REAR1 +
@@ -145,32 +91,37 @@ fuelKg*ARM_FUEL;
 
 // total mass
 let mass =
-BEW_KG + pilot + copilot + rear1 + rear2 + bag1 + bag2 + fuelKg;
+bewMass + pilot + copilot + rear1 + rear2 + bag1 + bag2 + fuelKg;
+let massLb = mass / LB_TO_KG;
 
 // CG
 let cg_mm = moment / mass;
 let cg_in = cg_mm / IN_TO_MM;
 
-// envelope check
-let weightLb = mass / LB_TO_KG;
-let fwd = interpFwd(weightLb);
-let aft = 87.7;
+let overMtow = mass > MTOW_KG;
+let cgTooFwd = cg_in < 77.0;
+let cgTooAft = cg_in > AFT_LIMIT;
 
-if (mass > MTOW_KG) warnings.push("Over MTOW");
-if (cg_in < fwd) warnings.push("CG too far forward");
-if (cg_in > aft) warnings.push("CG too far aft");
+if (overMtow) {
+  warnings.push(`Over MTOW - ${MTOW_KG.toFixed(1)} kg (${(MTOW_KG / LB_TO_KG).toFixed(0)} lb)`);
+} else if (cgTooFwd) {
+  warnings.push("CG is likely out of limits. Check the image below with CG and weight in lb.");
+} else if (cgTooAft) {
+  warnings.push("CG is too far aft. Check the image below with CG and weight in lb.");
+}
 
 // output
 out().innerHTML = `
-Total Mass: <b>${mass.toFixed(1)} kg</b><br>
+Total Mass: <b>${mass.toFixed(1)} kg (${massLb.toFixed(0)} lb)</b><br>
 CG: <b>${cg_mm.toFixed(0)} mm (${cg_in.toFixed(2)} in)</b><br>
-Envelope: ${fwd.toFixed(1)} – ${aft} in<br>
-Status: ${warnings.length ? warnings.join("<br>") : "Within limits ✅"}
+Status: ${warnings.length ? warnings.join("<br>") : "Check the image below with CG and weight in lb."}
 `;
 
 }
 
 // DOM helpers
+const bewMassEl = ()=>document.getElementById("bewMass");
+const bewCgEl = ()=>document.getElementById("bewCg");
 const pilotEl = ()=>document.getElementById("pilot");
 const copilotEl = ()=>document.getElementById("copilot");
 const rear1El = ()=>document.getElementById("rear1");

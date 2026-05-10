@@ -11,8 +11,16 @@
 <div class="app">
 <header>
 <h1>A36 Electronic Load Sheet</h1>
-<p>Mass & CG Calculator (Metric)</p>
+<p>Mass & CG Calculator. Please enter the required values below.</p>
 </header>
+
+<section class="card">
+<h2>Basic Empty Condition</h2>
+<div class="grid">
+<label>Basic Empty Mass (kg) (Sample Value - 1012)</label><input id="bewMass" value="1012.5">
+<label>Basic Empty CG (in) (Sample Value - 76.7)</label><input id="bewCg" value="76.7">
+</div>
+</section>
 
 <section class="card">
 <h2>Occupants</h2>
@@ -35,7 +43,7 @@
 <section class="card">
 <h2>Fuel</h2>
 <div class="grid">
-<label>Fuel onboard (liters)</label><input id="fuel">
+<label>Fuel onboard (liters) (Standard max 189.27)</label><input id="fuel">
 </div>
 </section>
 
@@ -44,18 +52,12 @@
 <section class="card">
 <h2>Results</h2>
 <div id="out"></div>
+</section>
 
-<div class="cg-diagram">
-
-<!-- simple aircraft silhouette -->
-
-
-
-<div class="cg-labels">
-  <span id="cgFwdLabel"></span>
-  <span id="cgAftLabel"></span>
-</div>
-
+<section class="card envelope-card">
+<h2>Weight / CG Envelope</h2>
+<div class="envelope-image">
+  <img id="envelopeImage" src="envelope.png" alt="A36 Weight / CG Envelope">
 </div>
 </section>
 
