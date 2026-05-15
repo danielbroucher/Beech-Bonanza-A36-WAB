@@ -44,7 +44,6 @@ function calculate() {
 let pilot = +pilotEl().value || 0;
 let copilot = +copilotEl().value || 0;
 let rear1 = +rear1El().value || 0;
-let rear2 = +rear2El().value || 0;
 let bag1 = +bag1El().value || 0;
 let bag2 = +bag2El().value || 0;
 let fuelL = +fuelEl().value || 0;
@@ -71,14 +70,13 @@ bewMoment +
 pilot*ARM_PILOT +
 copilot*ARM_PILOT +
 rear1*ARM_REAR1 +
-rear2*ARM_REAR2 +
 bag1*ARM_BAG1 +
 bag2*ARM_BAG2 +
 fuelKg*ARM_FUEL;
 
 // total mass
 let mass =
-bewMass + pilot + copilot + rear1 + rear2 + bag1 + bag2 + fuelKg;
+bewMass + pilot + copilot + rear1 + bag1 + bag2 + fuelKg;
 let massLb = mass / LB_TO_KG;
 
 // CG
@@ -112,7 +110,6 @@ const bewCgEl = ()=>document.getElementById("bewCg");
 const pilotEl = ()=>document.getElementById("pilot");
 const copilotEl = ()=>document.getElementById("copilot");
 const rear1El = ()=>document.getElementById("rear1");
-const rear2El = ()=>document.getElementById("rear2");
 const bag1El = ()=>document.getElementById("bag1");
 const bag2El = ()=>document.getElementById("bag2");
 const fuelEl = ()=>document.getElementById("fuel");
